@@ -1,0 +1,5 @@
+../Core/Src/bme680_add.c:4:6:user_delay_us	16	static
+../Core/Src/bme680_add.c:9:9:user_i2c_read	40	static
+../Core/Src/bme680_add.c:18:9:user_i2c_write	40	static
+../Core/Src/bme680_add.c:27:9:init_sensor	16	static
+../Core/Src/bme680_add.c:38:9:set_sensor_settings	24	static
