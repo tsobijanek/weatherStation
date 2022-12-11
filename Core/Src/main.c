@@ -64,12 +64,21 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   HAL_UART_Receive_DMA(&huart1, RX, 30);
 }
 
-void power_on(void)
+void HAL_Delay(uint32_t Delay)
 {
-    HAL_GPIO_WritePin(PWRKEY_GPIO_Port, PWRKEY_Pin, GPIO_PIN_RESET);
-    HAL_Delay(2000);
-    HAL_GPIO_WritePin(PWRKEY_GPIO_Port, PWRKEY_Pin, GPIO_PIN_SET);
-    HAL_Delay(2000);
+ uint32_t tickstart = HAL_GetTick();
+ uint32_t wait = Delay;
+
+ /* Add a period to guaranty minimum wait */
+ if (wait < HAL_MAX_DELAY)
+ {
+   wait++;
+ }
+
+ while((HAL_GetTick() - tickstart) < wait)
+ {
+	 __WFI();
+ }
 }
 /* USER CODE END 0 */
 
@@ -105,9 +114,6 @@ int main(void)
   MX_USART1_UART_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-
-  power_on();
-
   if (init_sensor(&bme680_sensor) != BME680_OK) {
 	  return 1;
   }
@@ -119,20 +125,6 @@ int main(void)
   uint16_t meas_period;
   bme680_get_profile_dur(&meas_period, &bme680_sensor);
   HAL_UART_Receive_DMA(&huart1, RX, 30);
-
-  for (int i = 0; i < 20; i++) {
-	  send_at();
-	  HAL_Delay(100);
-  }
-
-  memset(RX, 0, strlen(RX));
-  set_mqtt_config();
-//  HAL_Delay(5000);
-  if (set_mqtt_config() != 0) {
-	  return 3;
-  }
-  start_gsm_connection();
-  HAL_Delay(3000);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -149,19 +141,30 @@ int main(void)
 		    	  char json_to_send[size];
 		    	  sprintf(json_to_send, "{\"temperature\":%f,\"humidity\":%f,\"pressure\":%f,\"voc\":%d}", data.temperature / 100.0f, data.humidity / 1000.0f, data.pressure / 100.0f, data.gas_resistance);
 
+		    	  power_on();
+
+		    	  for (int i = 0; i < 20; i++) {
+		    		  send_at();
+		    		  HAL_Delay(100);
+		    	  }
+
+		    	  memset(RX, 0, strlen(RX));
+		    	  set_mqtt_config();
+		    	  HAL_Delay(1000);
+		    	  start_gsm_connection();
+		    	  HAL_Delay(5000);
 		    	  start_mqtt_connection();
 			      mqtt_publish(json_to_send, size);
 			      end_mqtt_connection();
+			      power_off();
 		      }
 		  }
-	  } else {
-		  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 	  }
 
       if (bme680_sensor.power_mode == BME680_FORCED_MODE) {
     	  bme680_set_sensor_mode(&bme680_sensor);
       }
-	  HAL_Delay(120000);
+	  HAL_Delay(3600000); // every one hour
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

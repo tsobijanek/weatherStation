@@ -2,6 +2,10 @@
 
 extern uint8_t RX[30];
 
+void power_on(void);
+
+void power_off(void);
+
 int check_at_response(const char* expected_response);
 
 int start_gsm_connection(void);

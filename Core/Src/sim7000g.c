@@ -27,6 +27,19 @@ const char START_MQTT_CONNECTION[] = "\rAT+SMCONN\r";
 const char END_MQTT_CONNECTION[] = "\rAT+SMDISC\r";
 const char MQTT_PUBLISH[] = "\rAT+SMPUB=\"demo/one\",%i,1,1\r";
 
+void power_on(void)
+{
+    HAL_GPIO_WritePin(PWRKEY_GPIO_Port, PWRKEY_Pin, GPIO_PIN_RESET);
+    HAL_Delay(2000);
+    HAL_GPIO_WritePin(PWRKEY_GPIO_Port, PWRKEY_Pin, GPIO_PIN_SET);
+    HAL_Delay(2000);
+}
+
+void power_off(void)
+{
+	power_on();
+}
+
 int check_at_response(const char* expected_response)
 {
 	if (strstr(RX, expected_response) == NULL) {
