@@ -68,10 +68,6 @@ int end_gsm_connection(void)
 {
 	HAL_UART_Transmit(uart, (uint8_t *)END_GSM_CONNECTION, sizeof(END_GSM_CONNECTION), 2000);
 
-//	if (check_at_response("APP PDP: DEACTIVE") != 0) {
-//		return 1;
-//	}
-
 	return 0;
 }
 
@@ -112,10 +108,6 @@ int start_mqtt_connection(void)
 	HAL_UART_Transmit(uart, (uint8_t *)START_MQTT_CONNECTION, sizeof(START_MQTT_CONNECTION), 2000);
 	HAL_Delay(3000);
 
-	if (check_at_response("OK") != 0) {
-		return 1;
-	}
-
 	return 0;
 }
 
@@ -123,10 +115,6 @@ int end_mqtt_connection(void)
 {
 	HAL_UART_Transmit(uart, (uint8_t *)END_MQTT_CONNECTION, sizeof(END_MQTT_CONNECTION), 2000);
 	HAL_Delay(5000);
-
-	if (check_at_response("OK") != 0) {
-		return 1;
-	}
 
 	return 0;
 }
@@ -142,9 +130,6 @@ int mqtt_publish(const char *json, const int size)
 	HAL_Delay(5000);
 	HAL_UART_Transmit(uart, (uint8_t *)json, size, 5000);
 	HAL_Delay(10000);
-	if (check_at_response("OK") != 0) {
-		return 1;
-	}
 
 	return 0;
 }
