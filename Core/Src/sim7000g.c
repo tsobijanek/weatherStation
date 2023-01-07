@@ -85,39 +85,21 @@ int set_mqtt_config(void)
 {
 	HAL_UART_Transmit(uart, (uint8_t*)MQTT_URL, sizeof(MQTT_URL), 500);
 	HAL_Delay(500);
-//	if (check_at_response("OK") != 0) {
-//		return 1;
-//	}
 
 	HAL_UART_Transmit(uart, (uint8_t*)MQTT_KEEPTIME, sizeof(MQTT_KEEPTIME), 500);
 	HAL_Delay(500);
-//	if (check_at_response("OK") != 0) {
-//		return 1;
-//	}
 
 	HAL_UART_Transmit(uart, (uint8_t*)MQTT_USERNAME, sizeof(MQTT_USERNAME), 500);
 	HAL_Delay(500);
-//	if (check_at_response("OK") != 0) {
-//		return 1;
-//	}
 
 	HAL_UART_Transmit(uart, (uint8_t*)MQTT_PASSWORD, sizeof(MQTT_PASSWORD), 500);
 	HAL_Delay(500);
-//	if (check_at_response("OK") != 0) {
-//		return 1;
-//	}
 
 	HAL_UART_Transmit(uart, (uint8_t*)MQTT_QOS, sizeof(MQTT_QOS), 500);
 	HAL_Delay(500);
-//	if (check_at_response("OK") != 0) {
-//		return 1;
-//	}
 
 	HAL_UART_Transmit(uart, (uint8_t*)MQTT_CLEANSS, sizeof(MQTT_CLEANSS), 500);
 	HAL_Delay(500);
-//	if (check_at_response("OK") != 0) {
-//		return 1;
-//	}
 
 	HAL_UART_Transmit(uart, (uint8_t*)MQTT_RETAIN, sizeof(MQTT_RETAIN), 500);
 	HAL_Delay(500);
